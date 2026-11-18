@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Login</title>
+    <meta charset="UTF-8">
+
+    <style>
+        body{
+            margin:8px;
+            background:url('https://i.pinimg.com/736x/d5/d6/ee/d5d6ee25a387c59190016f514dc8d08d.jpg') no-repeat center/cover;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            height:100vh;
+        }
+
+        fieldset{
+            background:rgba(0,0,0,0.4);
+            padding:30px;
+            border-radius:10px;
+            color:white;
+        }
+
+        input{
+            width:250px;
+            padding:8px;
+            border:none;
+            border-radius:5px;
+        }
+
+        button{
+            width:100%;
+            padding:10px;
+            border:none;
+            border-radius:5px;
+            background:#1E90FF;
+            color:white;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#555;
+        }
+
+        a{
+            color:blue;
+            text-decoration:none;
+        }
+    </style>
+</head>
+<body>
+    <fieldset>
+        <form id="adminForm">
+            <h2 align="center">ADMIN PAGE</h2>
+            <label>Email</label><br>
+            <input type="email" title="enter valid email id" id="email" placeholder="Enter your Email"><br><br>
+            <label>Password</label><br>
+            <input type="password"  title="enter correct password" id="password" placeholder="Enter your Password"><br><br>
+            <button type="submit">Login</button>
+        </form>
+    </fieldset>
+    <script>
+        document.getElementById("adminForm").addEventListener("submit",function(e){
+            e.preventDefault();
+
+            let email=document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+
+            if(email==="student@gmail.com" && password==="240111401"){
+                alert("Login Success ✅");
+                window.location.href = "admin_deshboard.html";
+            }
+            else{
+                alert("Invalid Email or Password ❌");
+            }
+        });
+    </script>
+
+</body>
+</html>

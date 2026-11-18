@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Forgot Password</title>
+
+<style>
+body{
+    margin:0;
+    background:url('https://i.pinimg.com/736x/d5/d6/ee/d5d6ee25a387c59190016f514dc8d08d.jpg') no-repeat center/cover;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    font-family: Arial;
+}
+
+fieldset{
+    background:rgba(0,0,0,0.4);
+    padding:30px;
+    border-radius:10px;
+    color:white;
+    width:300px;
+}
+
+input{
+    width:100%;
+    padding:8px;
+    margin-top:5px;
+    margin-bottom:15px;
+    border:none;
+    border-radius:5px;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    background:#4CAF50;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#45a049;
+}
+
+a{
+    color:#ddd;
+    text-decoration:none;
+}
+</style>
+
+</head>
+
+<body>
+
+<fieldset>
+
+<h2 align="center">Reset Password</h2>
+
+<label>Email</label>
+<input type="email" id="email" placeholder="Enter your email">
+
+<label>New Password</label>
+<input type="password" id="newpass" placeholder="Enter new password">
+
+<label>Confirm Password</label>
+<input type="password" id="confpass" placeholder="Confirm password">
+
+<button onclick="resetPass()">Update Password</button>
+
+<br><br>
+
+<center>
+    <a href="login.html">Back to Login</a>
+</center>
+
+</fieldset>
+
+<script>
+
+async function resetPass(){
+
+    let email = document.getElementById("email").value;
+    let p1 = document.getElementById("newpass").value;
+    let p2 = document.getElementById("confpass").value;
+    if(!email || !p1 || !p2){
+        alert("All fields are required!");
+        return;
+    }
+
+    if(p1 !== p2){  //passward match
+        alert("Passwords do not match!");
+        return;
+    }
+
+    try{
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/api/forgot-password",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    new_password: p1
+                })
+            }
+        );
+        const data = await response.json();
+        console.log(data);
+        if(data.message){
+            alert(data.message);
+            window.location.href = "login.html";
+        }
+        else{
+            alert(data.error || "Something went wrong");
+        }
+
+    }
+    catch(err){
+        console.log(err);
+        alert("Server Error ❌");
+    }
+}
+
+</script>
+</body>
+</html>

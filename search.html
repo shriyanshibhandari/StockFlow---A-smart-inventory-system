@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Search</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:url('https://i.pinimg.com/736x/d5/d6/ee/d5d6ee25a387c59190016f514dc8d08d.jpg') no-repeat center/cover;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    background:rgba(0,0,0,0.4);
+    padding:25px;
+    border-radius:10px;
+    width:350px;
+    color:white;
+}
+
+input{
+    width:100%;
+    padding:8px;
+    margin:6px 0;
+    border:none;
+    border-radius:5px;
+}
+
+button{
+    width:100%;
+    padding:8px;
+    background:#333;
+    color:white;
+    border:none;
+    border-radius:5px;
+}
+
+button:hover{
+    background:#555;
+}
+
+#result{
+    margin-top:10px;
+    background:rgba(255,255,255,0.1);
+    padding:10px;
+    border-radius:5px;
+}
+
+iframe{
+    width:100%;
+    height:180px;
+    margin-top:10px;
+    border:none;
+    border-radius:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h3 style="text-align:center;">SEARCH</h3>
+
+<input type="text" id="pickup" placeholder="Pickup Stop">
+<input type="text" id="drop" placeholder="Drop Stop">
+
+<button onclick="searchBus()">Search</button>
+
+<div id="result"></div>
+
+<iframe id="map"></iframe>
+
+</div>
+
+<script>
+async function searchBus(){
+
+    let pickup = document.getElementById("pickup").value;
+    let drop = document.getElementById("drop").value;
+
+    const res = await fetch("http://127.0.0.1:8000/search", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({pickup, drop})
+    });
+
+    const data = await res.json();
+
+    if(data.error){
+        document.getElementById("result").innerHTML =
+        "<p>Stop not found ❌</p>";
+        return;
+    }
+
+    document.getElementById("result").innerHTML = `
+        <p><b>Nearest Stop:</b> ${data.nearest_stop}</p>
+        <p><b>Stop:</b> ${data.stop_name}</p>
+        <p><b>Bus No:</b> ${data.bus_no}</p>
+        <p><b>Time:</b> ${data.time}</p>
+        <p><b>Driver:</b> ${data.driver_name}</p>
+        <p><b>Driver Mobile:</b> ${data.driver_mobile}</p>
+        <p><b>Conductor:</b> ${data.conductor_name}</p>
+        <p><b>Conductor Mobile:</b> ${data.conductor_mobile}</p>
+    `;
+
+    document.getElementById("map").src =
+    "https://www.google.com/maps?q=" + encodeURIComponent(data.nearest_stop) + "&output=embed";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:url('https://i.pinimg.com/736x/d5/d6/ee/d5d6ee25a387c59190016f514dc8d08d.jpg') no-repeat center/cover;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    background:rgba(0,0,0,0.6);
+    padding:25px;
+    border-radius:10px;
+    color:white;
+    width:400px;
+}
+
+.row{
+    margin:10px 0;
+}
+
+label{
+    display:inline-block;
+    width:160px;
+    font-weight:bold;
+}
+
+input{
+    width:55%;
+    padding:5px;
+    border-radius:5px;
+    border:none;
+}
+
+button{
+    margin-top:15px;
+    padding:8px;
+    width:100%;
+    border:none;
+    border-radius:5px;
+    background:#333;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#555;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2 align="center">ADMIN DASHBOARD</h2>
+
+<!-- SEARCH -->
+<label>Search Stop</label><br>
+<input type="text" id="searchStop" placeholder="Enter Stop Name" style="width:100%">
+<button onclick="searchData()">Search</button>
+
+<hr>
+
+<div class="row">
+<label>Stop Station:</label>
+<input type="text" id="stop">
+</div>
+
+<div class="row">
+<label>Bus No:</label>
+<input type="text" id="bus">
+</div>
+
+<div class="row">
+<label>Time:</label>
+<input type="text" id="time">
+</div>
+
+<div class="row">
+<label>Driver Name:</label>
+<input type="text" id="driver">
+</div>
+
+<div class="row">
+<label>Driver Mobile:</label>
+<input type="text" id="driverMobile">
+</div>
+
+<div class="row">
+<label>Conductor Name:</label>
+<input type="text" id="conductor">
+</div>
+
+<div class="row">
+<label>Conductor Mobile:</label>
+<input type="text" id="conductorMobile">
+</div>
+
+<div class="row">
+<label>Route:</label>
+<input type="text" id="route">
+</div>
+
+<button onclick="saveData()">Save Changes</button>
+
+</div>
+
+<script>
+
+async function searchData(){
+
+    let stop = document.getElementById("searchStop").value;
+
+    const res = await fetch(
+        "http://127.0.0.1:8000/stop?stop_name=" + encodeURIComponent(stop)
+    );
+
+    const data = await res.json();
+
+    console.log(data);
+
+    if(data.error){
+        alert("Stop not found ❌");
+        return;
+    }
+
+    document.getElementById("stop").value = data.stop_name;
+    document.getElementById("bus").value = data.bus_no;
+    document.getElementById("time").value = data.time;
+    document.getElementById("driver").value = data.driver_name;
+    document.getElementById("driverMobile").value = data.driver_mobile;
+    document.getElementById("conductor").value = data.conductor_name;
+    document.getElementById("conductorMobile").value = data.conductor_mobile;
+    document.getElementById("route").value = data.route;
+}
+
+async function saveData(){
+
+    let data = {
+        stop_name: document.getElementById("stop").value,
+        bus_no: document.getElementById("bus").value,
+        time: document.getElementById("time").value,
+        driver_name: document.getElementById("driver").value,
+        driver_mobile: document.getElementById("driverMobile").value,
+        conductor_name: document.getElementById("conductor").value,
+        conductor_mobile: document.getElementById("conductorMobile").value,
+        route: document.getElementById("route").value
+    };
+
+    await fetch("http://127.0.0.1:8000/admin/update", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(data)
+    });
+
+    alert("Saved Successfully ✅");
+}
+
+</script>
+
+</body>
+</html>

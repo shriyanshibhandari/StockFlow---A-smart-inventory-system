@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<head>
+	<title>Register</title>
+</head>
+<style>
+body{
+    margin:8px;
+     background:url('https://i.pinimg.com/736x/d5/d6/ee/d5d6ee25a387c59190016f514dc8d08d.jpg') no-repeat center/cover;
+      display:flex;
+     justify-content:center;
+      align-items:center;
+      height:100vh;
+  }
+
+fieldset{
+      background:rgba(0,0,0,0.4);
+     padding:30px;
+      border-radius:10px;
+       color:white;
+}
+
+  img{
+      display:none;
+   }
+
+     a{
+        color:blue;
+     text-decoration:none;
+   }
+    </style>
+  <body>
+	<fieldset>
+<form id="signupForm">
+    <table>
+	<h2 align="center"> REGISTER PAGE </h2>
+    <center>
+    <label> Name </label><br/>
+    <input type="text" pattern="[a-zA-Z ]+" title="Enter valid name" placeholder="Enter your name" name="uname"/>
+     <br/>
+     <br/>
+     <label> Email </label><br/>
+    <input type="Email" title="Enter valid email id" placeholder="Enter your Email" name="Email"/>
+     <br/>
+     <br/>
+      <label> Pasword </label><br/>
+    <input type="password" title="Enter valid digit" placeholder="Enter your password" name="Pasword"/>
+     <br/>
+     <br/>
+    <label> Student ID </label><br/>
+    <input type="tel" pattern="[0-9]+" title="Enter valid student id" placeholder="Enter your Student id" name="Student ID"/>
+     <br/>
+     <br/>
+     <label> Phone No </label><br/>
+    <input type="tel" pattern="[0-9]{10}" title="Enter valid digit [10]" placeholder="Enter your Phone no." name="Phone No"/>
+     <br/>
+     <br/>
+    <button type="submit">save</button>
+     <br/>
+     <br/>
+     <label>if you already register!! </label>
+    <a href="login.html">Login</a>
+          </table>
+</form>
+<script>
+document.getElementById("signupForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+    const data = {
+        name: document.querySelector('input[name="uname"]').value,
+        email: document.querySelector('input[name="Email"]').value,
+        password: document.querySelector('input[name="Pasword"]').value,
+        student_id: document.querySelector('input[name="Student ID"]').value,
+        phone: document.querySelector('input[name="Phone No"]').value
+    };
+    const response = await fetch("http://127.0.0.1:8000/api/signup", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    if(response.ok){
+        alert("Registration Successful ✅");
+        window.location.href = "login.html";
+    }
+    else{
+        alert(result.detail);
+    }
+});
+</script>
+</fieldset>
+</body>
+</head>
